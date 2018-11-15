@@ -58,8 +58,25 @@ def pca_whiten(x2d, n_comp, verbose=True):
     Xwhite : Whitened X
     white : whitening matrix (Xwhite = np.dot(white,X))
     dewhite : dewhitening matrix (X = np.dot(dewhite,Xwhite))
+    w is eigen values
+    v is eigen vectors(nd)=E
+    u=x*E*D^-0.5=z=whittened data
+    x_white =E.T
+    white=D^-0.5*z.T
+    dewhite=z*D^0.5
+    
+    w is eigen values
+    u is eigen vectors(nd)=E
+    x_white =E.T*x*D^-0.5
+    white=D^-0.5*E.T
+    dewhite=z*D^0.5
     """
-    x2d_demean = x2d - x2d.mean(axis=1).reshape((-1, 1))
+    """
+    Modify:
+    change use x2d itself, not demean
+    """
+    #x2d_demean = x2d - x2d.mean(axis=1).reshape((-1, 1))
+    x2d_demean = x2d
     NSUB, NVOX = x2d_demean.shape
     if NSUB > NVOX:
         cov = dot(x2d_demean.T, x2d_demean) / (NSUB - 1)
